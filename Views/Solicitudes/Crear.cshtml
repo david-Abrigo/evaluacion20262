@@ -1,0 +1,76 @@
+@model evaluacion20262.Models.SolicitudServicio
+
+@{
+    ViewData["Title"] = "Registrar Solicitud - TecnoGas Hogar";
+}
+
+<div class="container py-4">
+    <div class="row justify-content-center">
+        <div class="col-md-8 col-lg-7">
+            <div class="card shadow-sm border-0 rounded-3">
+                <div class="card-header bg-primary text-white py-3">
+                    <h3 class="card-title mb-0 h5">
+                        <i class="bi bi-tools me-2"></i>Nueva Solicitud de Servicio Técnico
+                    </h3>
+                    <small class="text-white-50">TecnoGas Hogar - Portal de Servicio Interno</small>
+                </div>
+                <div class="card-body p-4">
+                    <form asp-action="Crear" method="post">
+                        <div asp-validation-summary="ModelOnly" class="alert alert-danger mb-3" role="alert"></div>
+
+                        <div class="mb-3">
+                            <label asp-for="Cliente" class="form-label fw-bold"></label>
+                            <input asp-for="Cliente" class="form-control" placeholder="Ej. Juan Pérez" />
+                            <span asp-validation-for="Cliente" class="text-danger small"></span>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="Telefono" class="form-label fw-bold"></label>
+                                <input asp-for="Telefono" class="form-control" placeholder="Ej. 987654321" />
+                                <span asp-validation-for="Telefono" class="text-danger small"></span>
+                            </div>
+
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="Distrito" class="form-label fw-bold"></label>
+                                <input asp-for="Distrito" class="form-control" placeholder="Ej. Los Olivos, Miraflores..." />
+                                <span asp-validation-for="Distrito" class="text-danger small"></span>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="TipoServicio" class="form-label fw-bold"></label>
+                            <select asp-for="TipoServicio" class="form-select">
+                                <option value="">-- Seleccione un tipo de servicio --</option>
+                                <option value="Instalación">Instalación</option>
+                                <option value="Mantenimiento">Mantenimiento</option>
+                                <option value="Revisión">Revisión</option>
+                                <option value="Fuga">Atención por Fuga de Gas (Urgente)</option>
+                            </select>
+                            <span asp-validation-for="TipoServicio" class="text-danger small"></span>
+                        </div>
+
+                        <div class="mb-4">
+                            <label asp-for="Descripcion" class="form-label fw-bold"></label>
+                            <textarea asp-for="Descripcion" class="form-control" rows="3" placeholder="Detalles adicionales sobre el estado de la terma, cocina u artefacto a gas..."></textarea>
+                            <span asp-validation-for="Descripcion" class="text-danger small"></span>
+                        </div>
+
+                        <div class="d-flex justify-content-between align-items-center pt-2">
+                            <a asp-action="Index" class="btn btn-outline-secondary">
+                                <i class="bi bi-arrow-left"></i> Cancelar / Ver Lista
+                            </a>
+                            <button type="submit" class="btn btn-primary px-4 fw-bold">
+                                Guardar Solicitud
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
