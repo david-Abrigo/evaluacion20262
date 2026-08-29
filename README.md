@@ -1,38 +1,36 @@
-# 🛠️ TecnoGas Hogar - Portal de Solicitudes de Servicio Técnico
+# 🛠️ TecnoGas Hogar - Portal Interno de Servicio Técnico
 
-**Evaluación Continua 1 - Ciclo 2026-2**  
-*Aplicación web .NET 10 MVC con Entity Framework Core, SQLite, Git/GitHub y despliegue preparado para Render.*
-
----
-
-## 📌 Descripción del Proyecto
-
-**TecnoGas Hogar** es una empresa peruana dedicada al mantenimiento e instalación de artefactos a gas en el hogar (cocinas, termas a gas, etc.). Este prototipo reemplaza el registro manual por WhatsApp y papel con un portal web interno para registrar las solicitudes de servicio de los clientes y consultarlas en tiempo real.
+Sistema web para el registro, control y seguimiento de solicitudes de servicio técnico a domicilio para artefactos a gas (instalaciones, mantenimientos, revisiones y atención de fugas).
 
 ---
 
-## 🚀 Tecnologías Utilizadas
+## 📌 Visión General del Sistema
 
-- **Framework:** .NET 10 (ASP.NET Core MVC)
-- **Base de Datos:** SQLite (`tecnogas.db`)
-- **ORM:** Entity Framework Core 10 (`Microsoft.EntityFrameworkCore.Sqlite`)
-- **Diseño & UI:** Bootstrap 5, Bootstrap Icons, HTML5, CSS3
-- **Control de Versiones:** Git & GitHub (Estrategia Git Flow con Pull Requests)
-- **Contenedorización:** Docker (Dockerfile multi-stage)
-- **Despliegue:** Render Web Service
+El portal interno de **TecnoGas Hogar** digitaliza el proceso de capturar y consultar requerimientos de clientes. La plataforma permite al equipo de operaciones ingresar nuevas solicitudes y visualizarlas inmediatamente en una interfaz clara y centralizada.
 
 ---
 
-## 🗄️ Modelo de Datos y Cadena de Conexión
+## 🚀 Tecnologías y Arquitectura
 
-### Entidad `SolicitudServicio`
-- `Id` (int, Clave Primaria Autoincremental)
-- `Cliente` (string, Requerido)
-- `Telefono` (string, Requerido)
-- `Distrito` (string, Requerido)
-- `TipoServicio` (string, Requerido: *Instalación, Mantenimiento, Revisión, Fuga*)
-- `Descripcion` (string, Opcional)
-- `FechaRegistro` (DateTime, Autogenerado)
+- **Backend:** .NET 10 (ASP.NET Core MVC)
+- **Persistencia de Datos:** SQLite con Entity Framework Core 10
+- **Frontend & UI:** HTML5, CSS3, Bootstrap 5 & Bootstrap Icons
+- **Estrategia de Ramificación:** Git Flow (`main`, `develop` y ramas de funcionalidades `feature/*`)
+- **Contenedorización & Cloud:** Docker multi-etapa y despliegue en Render Web Service
+
+---
+
+## 🗄️ Estructura de Datos y Configuración
+
+### Modelo `SolicitudServicio`
+Representa el registro de atención técnica en la base de datos:
+- `Id`: Identificador único (Clave Primaria).
+- `Cliente`: Nombre o razón social del cliente.
+- `Telefono`: Número de contacto.
+- `Distrito`: Ubicación del servicio.
+- `TipoServicio`: Categoria del trabajo (*Instalación, Mantenimiento, Revisión, Fuga*).
+- `Descripcion`: Detalles específicos del requerimiento.
+- `FechaRegistro`: Marca de tiempo automática de registro.
 
 ### Cadena de Conexión (`appsettings.json`)
 ```json
@@ -41,68 +39,49 @@
 }
 ```
 
-> **Nota:** La aplicación ejecuta `context.Database.Migrate()` en `Program.cs` de forma automática al iniciar, garantizando que la base de datos `tecnogas.db` y sus tablas se creen automáticamente tanto en entorno local como en el contenedor desplegado en Render.
+---
+
+## 🌿 Flujo de Trabajo y Control de Versiones
+
+El código fuente sigue las mejores prácticas de integración continua mediante control de versiones:
+- **`main`**: Rama estable de producción.
+- **`develop`**: Rama de integración continua.
+- **Ramas `feature/*`**: Ramas independientes para el desarrollo modular de componentes (persistencia, formularios y módulos de consulta) integradas a través de Pull Requests.
 
 ---
 
-## 🌿 Estructura de Ramas y Pull Requests en Git
+## 💻 Guía de Instalación y Ejecución Local
 
-El desarrollo del proyecto se realizó mediante ramas de características (*features*) integradas progresivamente a la rama `develop` mediante Pull Requests y finalmente consolidadas en `main`:
+### Requisitos
+- .NET 10.0 SDK instalado.
 
-- **`main`**: Rama principal de producción lista para despliegue.
-- **`develop`**: Rama de integración de desarrollo.
-- **`feature/modelo-sqlite`**: Configuración de EF Core, Modelo y Migraciones (PR #1).
-- **`feature/registro-solicitud`**: Implementación del formulario de registro Insert (PR #2).
-- **`feature/listado-solicitudes`**: Implementación de la tabla de consulta Select (PR #3).
-
----
-
-## 💻 Instrucciones para Ejecutar Localmente
-
-### Requisitos Previos
-- .NET 10 SDK instalado.
-
-### Pasos
-1. Clonar el repositorio:
+### Pasos de Ejecución
+1. **Clonar el repositorio:**
    ```bash
    git clone https://github.com/david-Abrigo/evaluacion20262.git
    cd evaluacion20262
    ```
 
-2. Restaurar paquetes y compilar:
+2. **Compilar y restaurar dependencias:**
    ```bash
    dotnet restore
    dotnet build
    ```
 
-3. Ejecutar la aplicación:
+3. **Iniciar el servidor web local:**
    ```bash
    dotnet run
    ```
-   Navega a `http://localhost:5000` en tu navegador.
+   Abre tu navegador en `http://localhost:5290` (o el puerto asignado en la consola).
 
 ---
 
-## 🐳 Despliegue en Render (Web Service)
+## 🐳 Despliegue en la Nube (Docker & Render)
 
-### Opción A: Despliegue con Docker (Recomendado)
-1. En **Render.com**, crea un nuevo **Web Service**.
-2. Conecta tu repositorio de GitHub `david-Abrigo/evaluacion20262` y selecciona la rama `main`.
-3. En **Environment**, selecciona **Docker**.
-4. Render detectará automáticamente el `Dockerfile` del proyecto.
-5. Haz clic en **Create Web Service**.
+El proyecto incluye un `Dockerfile` optimizado en 3 etapas (*multi-stage build*) para su despliegue automatizado.
 
-### Opción B: Despliegue Nativo .NET en Render
-- **Environment:** `.NET`
-- **Build Command:** `dotnet publish -c Release -o out`
-- **Start Command:** `dotnet out/evaluacion20262.dll`
-
----
-
-## 🌐 Entregables de la Evaluación
-
-- **Repositorio GitHub:** [https://github.com/david-Abrigo/evaluacion20262](https://github.com/david-Abrigo/evaluacion20262)
-- **Pull Requests Visibles:**
-  - PR #1: `feature/modelo-sqlite` -> `develop`
-  - PR #2: `feature/registro-solicitud` -> `develop`
-  - PR #3: `feature/listado-solicitudes` -> `develop`
+### Pasos para Despliegue en Render
+1. Crear un **Web Service** en Render.com vinculado a este repositorio.
+2. Seleccionar la rama principal `main`.
+3. Seleccionar el entorno de ejecución **Docker**.
+4. Confirmar la creación; las migraciones de base de datos se aplicarán automáticamente al iniciar el servicio.
