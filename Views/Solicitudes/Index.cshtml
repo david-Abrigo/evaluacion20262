@@ -1,0 +1,95 @@
+@model IEnumerable<evaluacion20262.Models.SolicitudServicio>
+
+@{
+    ViewData["Title"] = "Solicitudes de Servicio - TecnoGas Hogar";
+}
+
+<div class="container py-4">
+    @if (TempData["MensajeExito"] != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show shadow-sm mb-4" role="alert">
+            <i class="bi bi-check-circle-fill me-2"></i> @TempData["MensajeExito"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h2 class="fw-bold mb-1">Solicitudes Registradas</h2>
+            <p class="text-muted mb-0">Gestión de atención de servicios técnicos - TecnoGas Hogar</p>
+        </div>
+        <a asp-action="Crear" class="btn btn-primary btn-lg shadow-sm">
+            + Nueva Solicitud
+        </a>
+    </div>
+
+    <div class="card shadow-sm border-0 rounded-3">
+        <div class="card-body p-0">
+            @if (!Model.Any())
+            {
+                <div class="text-center py-5 text-muted">
+                    <p class="h5 mb-2">No hay solicitudes registradas aún.</p>
+                    <p class="small mb-3">Haz clic en el botón de arriba para registrar la primera solicitud del cliente.</p>
+                    <a asp-action="Crear" class="btn btn-outline-primary btn-sm">Registrar Solicitud</a>
+                </div>
+            }
+            else
+            {
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle mb-0">
+                        <thead class="table-light">
+                            <tr>
+                                <th>#</th>
+                                <th>Cliente</th>
+                                <th>Teléfono</th>
+                                <th>Distrito</th>
+                                <th>Tipo de Servicio</th>
+                                <th>Descripción</th>
+                                <th>Fecha Registro</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model)
+                            {
+                                <tr>
+                                    <td class="fw-bold text-muted">@item.Id</td>
+                                    <td class="fw-bold">@item.Cliente</td>
+                                    <td>
+                                        <a href="tel:@item.Telefono" class="text-decoration-none">
+                                            @item.Telefono
+                                        </a>
+                                    </td>
+                                    <td>@item.Distrito</td>
+                                    <td>
+                                        @switch (item.TipoServicio)
+                                        {
+                                            case "Fuga":
+                                                <span class="badge bg-danger">Fuga (Urgente)</span>
+                                                break;
+                                            case "Instalación":
+                                                <span class="badge bg-success">Instalación</span>
+                                                break;
+                                            case "Mantenimiento":
+                                                <span class="badge bg-info text-dark">Mantenimiento</span>
+                                                break;
+                                            case "Revisión":
+                                                <span class="badge bg-warning text-dark">Revisión</span>
+                                                break;
+                                            default:
+                                                <span class="badge bg-secondary">@item.TipoServicio</span>
+                                                break;
+                                        }
+                                    </td>
+                                    <td class="text-truncate" style="max-width: 250px;" title="@item.Descripcion">
+                                        @(string.IsNullOrWhiteSpace(item.Descripcion) ? "-" : item.Descripcion)
+                                    </td>
+                                    <td class="small text-muted">@item.FechaRegistro.ToString("dd/MM/yyyy HH:mm")</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            }
+        </div>
+    </div>
+</div>
