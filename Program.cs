@@ -1,6 +1,9 @@
 using Microsoft.EntityFrameworkCore;
 using evaluacion20262.Data;
 
+// Prevenir error de inotify limit (128) en contenedores de Render / Linux
+Environment.SetEnvironmentVariable("DOTNET_USE_POLLING_FILE_WATCHER", "1");
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -39,4 +42,3 @@ app.MapControllerRoute(
     .WithStaticAssets();
 
 app.Run();
-

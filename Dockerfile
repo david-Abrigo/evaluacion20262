@@ -3,6 +3,7 @@ FROM mcr.microsoft.com/dotnet/aspnet:9.0 AS base
 WORKDIR /app
 EXPOSE 8080
 ENV ASPNETCORE_URLS=http://+:8080
+ENV DOTNET_USE_POLLING_FILE_WATCHER=1
 
 # Etapa 2: Construcción y publicación (SDK)
 FROM mcr.microsoft.com/dotnet/sdk:9.0 AS build
@@ -19,4 +20,5 @@ RUN dotnet publish "evaluacion20262.csproj" -c Release -o /app/publish /p:UseApp
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
+ENV DOTNET_USE_POLLING_FILE_WATCHER=1
 ENTRYPOINT ["dotnet", "evaluacion20262.dll"]
